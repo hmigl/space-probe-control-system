@@ -3,10 +3,12 @@ package com.api.spaceprobecontrol.spaceprobe;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class DesignationSpaceProbeRequest {
     @Valid
+    @NotNull
     List<SpaceProbeRequest> spaceProbes;
 
     @JsonCreator
