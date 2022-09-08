@@ -41,6 +41,14 @@ public class Planet {
         return id;
     }
 
+    public int getxAxis() {
+        return xAxis;
+    }
+
+    public int getyAxis() {
+        return yAxis;
+    }
+
     @Override
     public String toString() {
         return "Planet{" +
