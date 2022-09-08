@@ -18,4 +18,8 @@ public class RegisterPlanetRequest {
     public int getyAxis() {
         return yAxis;
     }
+
+    public Planet toModel() {
+        return new Planet(xAxis, yAxis);
+    }
 }

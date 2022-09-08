@@ -13,6 +13,7 @@ public class PlanetController {
 
     @PostMapping
     void registerNewPlanet(@RequestBody @Valid RegisterPlanetRequest request) {
-        System.out.println("here!");
+        var newPlanet = request.toModel();
+        System.out.println(newPlanet.toString());
     }
 }
