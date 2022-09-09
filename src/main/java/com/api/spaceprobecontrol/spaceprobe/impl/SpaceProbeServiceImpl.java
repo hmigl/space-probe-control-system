@@ -2,12 +2,11 @@ package com.api.spaceprobecontrol.spaceprobe.impl;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.DesignationSpaceProbeRequest;
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRequest;
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -20,11 +19,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         this.repository = repository;
     }
 
-    private HashSet<SpaceProbeRequest> ignoreDuplicates(DesignationSpaceProbeRequest request) {
-        return new HashSet<>(request.getSpaceProbes());
-    }
-
-    private boolean allWithinPlanetBorders(HashSet<SpaceProbeRequest> uncommonSpaceProbes, Long id) {
+    private boolean allWithinPlanetBorders(List<SpaceProbeRequest> uncommonSpaceProbes, Long id) {
         Optional<Planet> possiblePlanet = repository.findById(id);
 
         return possiblePlanet.map(planet -> {
@@ -38,8 +33,8 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public boolean allCanLand(DesignationSpaceProbeRequest request, Long id) {
-        return allWithinPlanetBorders(ignoreDuplicates(request), id);
+    public boolean allCanLand(List<SpaceProbeRequest> request, Long id) {
+        return allWithinPlanetBorders(request, id);
     }
 
     @Override
