@@ -1,5 +1,7 @@
 package com.api.spaceprobecontrol.spaceprobe;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,13 +21,12 @@ public class SpaceProbeController {
     }
 
     @PostMapping("/planets/{id}/probes")
-    void registerNewSpaceProbe(@PathVariable("id") Long id,
-                               @RequestBody @Valid DesignationSpaceProbeRequest request) {
-        if (!spaceProbeService.allCanLand(request, id)) {
-            System.out.println("uepa!");
-            return;
-        }
-//        spaceProbeService.process(request);
-        request.getSpaceProbes().forEach(System.out::println);
+    ResponseEntity<?> registerNewSpaceProbe(@PathVariable("id") Long id,
+                                         @RequestBody @Valid DesignationSpaceProbeRequest request) {
+        if (!spaceProbeService.existsById(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id);
+        if (!spaceProbeService.allCanLand(request, id))
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build(); // throw custom exception?
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
