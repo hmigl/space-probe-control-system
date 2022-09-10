@@ -1,6 +1,7 @@
 package com.api.spaceprobecontrol.spaceprobe;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +12,7 @@ public class DesignationSpaceProbeRequest {
     @Valid
     @NotNull
     @NotEmpty
+    @UniqueElements
     List<SpaceProbeRequest> spaceProbes;
 
     @JsonCreator
