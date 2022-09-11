@@ -1,19 +1,19 @@
 package com.api.spaceprobecontrol.planet;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "planet")
 public class Planet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "planet_id")
     private Long id;
     @Positive
     @NotNull
@@ -23,6 +23,9 @@ public class Planet {
     @NotNull
     @Column(name = "y_axis", nullable = false)
     private int yAxis;
+
+    @OneToMany(mappedBy = "planet")
+    List<SpaceProbe> spaceProbes = new ArrayList<>();
 
     /**
      *
@@ -47,6 +50,10 @@ public class Planet {
 
     public int getyAxis() {
         return yAxis;
+    }
+
+    public List<SpaceProbe> getSpaceProbes() {
+        return spaceProbes;
     }
 
     @Override
