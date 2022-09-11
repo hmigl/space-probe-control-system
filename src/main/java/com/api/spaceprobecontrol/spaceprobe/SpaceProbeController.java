@@ -22,7 +22,7 @@ public class SpaceProbeController {
                                             @RequestBody @Valid DesignationSpaceProbeRequest request) {
         List<SpaceProbeRequest> requests = request.getSpaceProbes();
 
-        if (!spaceProbeService.existsById(id))
+        if (!spaceProbeService.planetExistsById(id))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id);
         if (!spaceProbeService.allCanLand(requests, id))
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build(); // throw custom exception?

@@ -13,22 +13,22 @@ import java.util.function.Predicate;
 @Service
 public class SpaceProbeServiceImpl implements SpaceProbeService {
 
-    private final PlanetRepository repository;
+    private final PlanetRepository planetRepository;
 
-    public SpaceProbeServiceImpl(PlanetRepository repository) {
-        this.repository = repository;
+    public SpaceProbeServiceImpl(PlanetRepository planetRepository) {
+        this.planetRepository = planetRepository;
     }
 
-    private boolean allWithinPlanetBorders(List<SpaceProbeRequest> uncommonSpaceProbes, Long id) {
-        Optional<Planet> possiblePlanet = repository.findById(id);
+    private boolean allWithinPlanetBorders(List<SpaceProbeRequest> spaceProbes, Long id) {
+        Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
         return possiblePlanet.map(planet -> {
-            Predicate<SpaceProbeRequest> respectsX = p -> p.getState().getxAxis() <= planet.getxAxis();
-            Predicate<SpaceProbeRequest> respectsY = p -> p.getState().getyAxis() <= planet.getyAxis();
+            Predicate<SpaceProbeRequest> respectsXAxis = p -> p.getState().getxAxis() <= planet.getxAxis();
+            Predicate<SpaceProbeRequest> respectsYAxis = p -> p.getState().getyAxis() <= planet.getyAxis();
 
-            return uncommonSpaceProbes
+            return spaceProbes
                     .stream()
-                    .allMatch(respectsX.and(respectsY));
+                    .allMatch(respectsXAxis.and(respectsYAxis));
         }).orElse(false);
     }
 
@@ -38,7 +38,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return repository.existsById(id);
+    public boolean planetExistsById(Long id) {
+        return planetRepository.existsById(id);
     }
 }
