@@ -27,8 +27,10 @@ public class SpaceProbeController {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
         return possiblePlanet.map(planet -> {
-            if (!spaceProbeService.allCanLand(request.getSpaceProbes(), id)) // pass 'planet' as param?
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build(); // throw custom exception?
+            if (!spaceProbeService.allCanLand(request.getSpaceProbes(), planet))
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Either there are probes already in the positions sent or the request list contains duplicated coordinates");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(spaceProbeService.saveAll(request.toModel(planet)));
 
