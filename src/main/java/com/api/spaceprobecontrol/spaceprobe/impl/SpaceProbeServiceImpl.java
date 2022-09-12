@@ -9,8 +9,10 @@ import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
 import org.springframework.stereotype.Service;
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -48,13 +50,17 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
                     .map(SpaceProbe::getCoordinate)
                     .collect(Collectors.toList());
 
-            // TODO: solve duplicated coordinates issue (maybe using a Set<>?)
-            List<Point> possibleCoordinates = requests
+            List<Point> possibleNewCoordinates = requests
                     .stream()
                     .map(coordinate -> new Point(coordinate.getState().getxAxis(), coordinate.getState().getyAxis()))
                     .collect(Collectors.toList());
 
-            return !existingCoordinates.removeAll(possibleCoordinates);
+            // List may have duplicates, compare their size to found out
+            Set<Point> uniquePossibleNewCoords = new HashSet<>(possibleNewCoordinates);
+            if (uniquePossibleNewCoords.size() != possibleNewCoordinates.size()) return false;
+
+            // Mutate 'existingCoordinates' to check for possible conflicts
+            return !existingCoordinates.removeAll(possibleNewCoordinates);
         }).orElse(false);
     }
 
