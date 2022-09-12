@@ -3,6 +3,7 @@ package com.api.spaceprobecontrol.spaceprobe.impl;
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
+import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRepository;
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRequest;
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 public class SpaceProbeServiceImpl implements SpaceProbeService {
 
     private final PlanetRepository planetRepository;
+    private final SpaceProbeRepository spaceProbeRepository;
 
-    public SpaceProbeServiceImpl(PlanetRepository planetRepository) {
+    public SpaceProbeServiceImpl(PlanetRepository planetRepository, SpaceProbeRepository spaceProbeRepository) {
         this.planetRepository = planetRepository;
+        this.spaceProbeRepository = spaceProbeRepository;
     }
 
     private boolean allWithinPlanetBorders(List<SpaceProbeRequest> spaceProbes, Long id) {
