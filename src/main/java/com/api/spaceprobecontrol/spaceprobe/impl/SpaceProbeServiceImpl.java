@@ -12,7 +12,6 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,23 +25,14 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         this.spaceProbeRepository = spaceProbeRepository;
     }
 
-    private boolean allWithinPlanetBorders(List<SpaceProbeRequest> spaceProbes, Planet planet) {
-        Predicate<SpaceProbeRequest> respectsXAxis = p -> p.getState().getxAxis() <= planet.getxAxis();
-        Predicate<SpaceProbeRequest> respectsYAxis = p -> p.getState().getyAxis() <= planet.getyAxis();
-
-        return spaceProbes
-                .stream()
-                .allMatch(respectsXAxis.and(respectsYAxis));
-    }
-
-    private boolean allWontClash(List<SpaceProbeRequest> requests, Planet planet) {
+    private boolean allWontClash(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
         List<Point> existingCoordinates = planet
                 .getSpaceProbes()
                 .stream()
                 .map(SpaceProbe::getCoordinate)
                 .collect(Collectors.toList());
 
-        List<Point> possibleNewCoordinates = requests
+        List<Point> possibleNewCoordinates = aspirantProbes
                 .stream()
                 .map(coordinate -> new Point(coordinate.getState().getxAxis(), coordinate.getState().getyAxis()))
                 .collect(Collectors.toList());
@@ -56,8 +46,8 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public boolean allCanLand(List<SpaceProbeRequest> requests, Planet planet) {
-        return allWithinPlanetBorders(requests, planet) && allWontClash(requests, planet);
+    public boolean allCanLand(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+        return planet.hasSuitableBorders(aspirantProbes) && allWontClash(aspirantProbes, planet);
     }
 
     @Override
