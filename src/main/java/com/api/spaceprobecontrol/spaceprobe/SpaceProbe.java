@@ -1,6 +1,7 @@
 package com.api.spaceprobecontrol.spaceprobe;
 
 import com.api.spaceprobecontrol.planet.Planet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,18 @@ public class SpaceProbe {
     @JoinColumn(name = "planet_id_fk", referencedColumnName = "planet_id")
     private Planet planet;
 
+    /**
+     *
+     * @deprecated default constructor required by hibernate
+     */
+    public SpaceProbe() {
+    }
+
+    public SpaceProbe(Point coordinate, Planet planet) {
+        this.coordinate = coordinate;
+        this.planet = planet;
+    }
+
     public Long getId() {
         return id;
     }
@@ -29,6 +42,7 @@ public class SpaceProbe {
         return coordinate;
     }
 
+    @JsonIgnore
     public Planet getPlanet() {
         return planet;
     }
