@@ -30,7 +30,7 @@ public class SpaceProbeController {
             if (!spaceProbeService.allCanLand(request.getSpaceProbes(), planet))
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("Either there are probes already in the positions sent or the request list contains duplicated coordinates");
+                        .body("Make sure the coordinates aren't duplicated, don't conflict with existing ones and respect planet borders");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(spaceProbeService.saveAll(request.toModel(planet)));
 
