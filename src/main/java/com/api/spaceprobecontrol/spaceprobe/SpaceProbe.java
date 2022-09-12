@@ -18,6 +18,11 @@ public class SpaceProbe {
     @Column(name = "coordinate")
     private Point coordinate;
 
+    @NotNull
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "points_to")
+    private Directions pointsTo;
+
     @ManyToOne
     @JoinColumn(name = "planet_id_fk", referencedColumnName = "planet_id")
     private Planet planet;
@@ -29,8 +34,9 @@ public class SpaceProbe {
     public SpaceProbe() {
     }
 
-    public SpaceProbe(Point coordinate, Planet planet) {
+    public SpaceProbe(Point coordinate, Directions pointsTo, Planet planet) {
         this.coordinate = coordinate;
+        this.pointsTo = pointsTo;
         this.planet = planet;
     }
 
@@ -40,6 +46,10 @@ public class SpaceProbe {
 
     public Point getCoordinate() {
         return coordinate;
+    }
+
+    public Directions getPointsTo() {
+        return pointsTo;
     }
 
     @JsonIgnore

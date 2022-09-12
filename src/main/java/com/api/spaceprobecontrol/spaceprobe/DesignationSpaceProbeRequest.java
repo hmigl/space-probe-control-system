@@ -38,7 +38,9 @@ public class DesignationSpaceProbeRequest {
         return spaceProbes
                 .stream()
                 .map(probe -> new SpaceProbe(
-                        new Point(probe.getState().getxAxis(), probe.getState().getyAxis()), planet)
+                        new Point(probe.getState().getxAxis(), probe.getState().getyAxis()),
+                        probe.getState().getPointsTo(),
+                        planet)
                 )
                 .collect(Collectors.toList());
     }
