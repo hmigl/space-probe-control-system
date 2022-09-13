@@ -1,5 +1,6 @@
 package com.api.spaceprobecontrol.spaceprobe;
 
+import com.api.spaceprobecontrol.shared.ExistentId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ public class MoveSpaceProbeRequest {
     public static class MovementDemand {
         @Positive
         @NotNull
+        @ExistentId(fieldName = "id", domainClass = SpaceProbe.class)
         private final Long probeId;
         @NotNull
         @Pattern(regexp = "[MLR]+")
