@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/probes")
 public class SpaceProbeController {
 
     private final PlanetRepository planetRepository;
@@ -21,9 +21,9 @@ public class SpaceProbeController {
         this.spaceProbeService = spaceProbeService;
     }
 
-    @PostMapping("/planets/{id}/probes")
-    ResponseEntity<?> registerNewSpaceProbe(@PathVariable("id") Long id,
-                                            @RequestBody @Valid DesignationSpaceProbeRequest request) {
+    @PostMapping
+    ResponseEntity<?> registerNewSpaceProbe(@RequestBody @Valid DesignationSpaceProbeRequest request,
+                                            @RequestParam("planetId") Long id) {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
         return possiblePlanet.map(planet -> {
