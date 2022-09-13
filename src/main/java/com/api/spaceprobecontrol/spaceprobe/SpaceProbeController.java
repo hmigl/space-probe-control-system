@@ -36,4 +36,10 @@ public class SpaceProbeController {
 
         }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id));
     }
+
+    @PutMapping
+    void moveSpaceProbe(@RequestBody @Valid MoveSpaceProbeRequest request) {
+        request.getInstructions().forEach(System.out::println);
+        System.out.println("here!");
+    }
 }
