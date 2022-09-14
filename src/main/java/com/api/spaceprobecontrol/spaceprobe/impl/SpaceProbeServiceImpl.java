@@ -2,12 +2,10 @@ package com.api.spaceprobecontrol.spaceprobe.impl;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRepository;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRequest;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
+import com.api.spaceprobecontrol.spaceprobe.*;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +54,13 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
+    @Transactional
     public List<SpaceProbe> saveAll(Iterable<SpaceProbe> entities) {
         return spaceProbeRepository.saveAll(entities);
+    }
+
+    @Override
+    public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet) {
+        return null;
     }
 }

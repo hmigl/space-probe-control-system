@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,8 +39,15 @@ public class SpaceProbeController {
     }
 
     @PutMapping
-    void moveSpaceProbe(@RequestBody @Valid MoveSpaceProbeRequest request) {
-        request.getInstructions().forEach(System.out::println);
-        System.out.println("here!");
+    ResponseEntity<?> moveSpaceProbe(@RequestBody @Valid MoveSpaceProbeRequest request,
+                                     @RequestParam("planetId") Long id) {
+        Optional<Planet> possiblePlanet = planetRepository.findById(id);
+
+        return possiblePlanet.map(planet -> {
+            List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(request.getInstructions(), planet);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Saul Goodman :)");
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id));
     }
 }
