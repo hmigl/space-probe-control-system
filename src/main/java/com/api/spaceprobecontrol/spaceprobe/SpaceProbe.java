@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "space_probe")
-public class SpaceProbe {
+public class SpaceProbe implements Movement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "sp_id")
@@ -67,40 +67,53 @@ public class SpaceProbe {
     }
 
     private void carefullyRelocate(Directions pointsTo, List<Point> existingCoordinatesButItsOwn) {
-        if (pointsTo == Directions.NORTH) { // immutable x, y += 1
-            int y = getCoordinate().y == getPlanet().getyAxis() ? 1 : getCoordinate().y + 1;
+        if (pointsTo == Directions.NORTH) // immutable x, y += 1
+            moveTowardsNorth(existingCoordinatesButItsOwn);
+        else if (pointsTo == Directions.SOUTH) // immutable x, y -= 1
+            moveTowardsSouth(existingCoordinatesButItsOwn);
+        else if (pointsTo == Directions.EAST) // x += 1, immutable y
+            moveTowardsEast(existingCoordinatesButItsOwn);
+        else // x -= 1, immutable y
+            moveTowardsWest(existingCoordinatesButItsOwn);
+    }
 
-            Point nextStep = new Point(getCoordinate().x, y);
-            if (existingCoordinatesButItsOwn.contains(nextStep))
-                return;
-            this.coordinate.setLocation(nextStep);
-        }
+    @Override
+    public void moveTowardsNorth(List<Point> existingCoordinatesButItsOwn) {
+        int y = getCoordinate().y == getPlanet().getyAxis() ? 1 : getCoordinate().y + 1;
 
-        else if (pointsTo == Directions.SOUTH) { // immutable x, y -= 1
-            int y = getCoordinate().y == 1 ? getPlanet().getyAxis() : getCoordinate().y - 1;
+        Point nextStep = new Point(getCoordinate().x, y);
+        if (existingCoordinatesButItsOwn.contains(nextStep))
+            return;
+        this.coordinate.setLocation(nextStep);
+    }
 
-            Point nextStep = new Point(getCoordinate().x, y);
-            if (existingCoordinatesButItsOwn.contains(nextStep))
-                return;
-            this.coordinate.setLocation(nextStep);
-        }
+    @Override
+    public void moveTowardsSouth(List<Point> existingCoordinatesButItsOwn) {
+        int y = getCoordinate().y == 1 ? getPlanet().getyAxis() : getCoordinate().y - 1;
 
-        else if (pointsTo == Directions.EAST) { // x += 1, immutable y
-            int x = getCoordinate().x == getPlanet().getxAxis() ? 1 : getCoordinate().x + 1;
+        Point nextStep = new Point(getCoordinate().x, y);
+        if (existingCoordinatesButItsOwn.contains(nextStep))
+            return;
+        this.coordinate.setLocation(nextStep);
+    }
 
-            Point nextStep = new Point(x, getCoordinate().y);
-            if (existingCoordinatesButItsOwn.contains(nextStep))
-                return;
-            this.coordinate.setLocation(nextStep);
-        }
+    @Override
+    public void moveTowardsEast(List<Point> existingCoordinatesButItsOwn) {
+        int x = getCoordinate().x == getPlanet().getxAxis() ? 1 : getCoordinate().x + 1;
 
-        else { // x -= 1, immutable y
-            int x = getCoordinate().x == 1 ? getPlanet().getxAxis() : getCoordinate().x - 1;
+        Point nextStep = new Point(x, getCoordinate().y);
+        if (existingCoordinatesButItsOwn.contains(nextStep))
+            return;
+        this.coordinate.setLocation(nextStep);
+    }
 
-            Point nextStep = new Point(x, getCoordinate().y);
-            if (existingCoordinatesButItsOwn.contains(nextStep))
-                return;
-            this.coordinate.setLocation(nextStep);
-        }
+    @Override
+    public void moveTowardsWest(List<Point> existingCoordinatesButItsOwn) {
+        int x = getCoordinate().x == 1 ? getPlanet().getxAxis() : getCoordinate().x - 1;
+
+        Point nextStep = new Point(x, getCoordinate().y);
+        if (existingCoordinatesButItsOwn.contains(nextStep))
+            return;
+        this.coordinate.setLocation(nextStep);
     }
 }
