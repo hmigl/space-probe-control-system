@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.awt.Point;
+import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,6 @@ public class SpaceProbe implements Movement {
     @NotNull
     @Column(name = "coordinate")
     private Point coordinate;
-
     @NotNull
     @Enumerated(value = EnumType.STRING)
     @Column(name = "points_to")
@@ -62,8 +61,7 @@ public class SpaceProbe implements Movement {
         for (char c : command.toCharArray()) {
             if (c == 'L' || c == 'R')
                 this.pointsTo = this.pointsTo.nextSide(c);
-            else if (!carefullyRelocate(pointsTo, existingCoordinatesButItsOwn))
-                    break;
+            else if (!carefullyRelocate(pointsTo, existingCoordinatesButItsOwn)) break;
         }
     }
 
@@ -78,47 +76,33 @@ public class SpaceProbe implements Movement {
             return moveTowardsWest(existingCoordinatesButItsOwn);
     }
 
+    private boolean canAccomplishMove(Point possibleNextCoordinate, List<Point> existingCoordinatesButItsOwn) {
+        if (existingCoordinatesButItsOwn.contains(possibleNextCoordinate)) return false;
+        this.coordinate.setLocation(possibleNextCoordinate);
+        return true;
+    }
+
     @Override
     public boolean moveTowardsNorth(List<Point> existingCoordinatesButItsOwn) {
         int y = getCoordinate().y == getPlanet().getyAxis() ? 1 : getCoordinate().y + 1;
-
-        Point nextStep = new Point(getCoordinate().x, y);
-        if (existingCoordinatesButItsOwn.contains(nextStep))
-            return false;
-        this.coordinate.setLocation(nextStep);
-        return true;
+        return canAccomplishMove(new Point(getCoordinate().x, y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsSouth(List<Point> existingCoordinatesButItsOwn) {
         int y = getCoordinate().y == 1 ? getPlanet().getyAxis() : getCoordinate().y - 1;
-
-        Point nextStep = new Point(getCoordinate().x, y);
-        if (existingCoordinatesButItsOwn.contains(nextStep))
-            return false;
-        this.coordinate.setLocation(nextStep);
-        return true;
+        return canAccomplishMove(new Point(getCoordinate().x, y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsEast(List<Point> existingCoordinatesButItsOwn) {
         int x = getCoordinate().x == getPlanet().getxAxis() ? 1 : getCoordinate().x + 1;
-
-        Point nextStep = new Point(x, getCoordinate().y);
-        if (existingCoordinatesButItsOwn.contains(nextStep))
-            return false;
-        this.coordinate.setLocation(nextStep);
-        return true;
+        return canAccomplishMove(new Point(x, getCoordinate().y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsWest(List<Point> existingCoordinatesButItsOwn) {
         int x = getCoordinate().x == 1 ? getPlanet().getxAxis() : getCoordinate().x - 1;
-
-        Point nextStep = new Point(x, getCoordinate().y);
-        if (existingCoordinatesButItsOwn.contains(nextStep))
-            return false;
-        this.coordinate.setLocation(nextStep);
-        return true;
+        return canAccomplishMove(new Point(x, getCoordinate().y), existingCoordinatesButItsOwn);
     }
 }
