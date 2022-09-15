@@ -24,12 +24,16 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         this.spaceProbeRepository = spaceProbeRepository;
     }
 
-    private boolean allWontClash(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
-        List<Point> existingCoordinates = planet
+    private List<Point> getExistingCoordinates(Planet planet) {
+        return planet
                 .getSpaceProbes()
                 .stream()
                 .map(SpaceProbe::getCoordinate)
                 .collect(Collectors.toList());
+    }
+
+    private boolean allWontClash(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+        List<Point> existingCoordinates = getExistingCoordinates(planet);
 
         List<Point> possibleNewCoordinates = aspirantProbes
                 .stream()
@@ -60,9 +64,16 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         return spaceProbeRepository.saveAll(entities);
     }
 
-    private Optional<SpaceProbe> reallocateToNewPosition(Long id, String command) {
+    private Optional<SpaceProbe> relocateToNewPosition(Long id, String command) {
         return spaceProbeRepository.findById(id).map(probe -> {
-            probe.move(command);
+            /*
+            * The space probe has to only worry about other probes' coordinates, so remove
+            * its own coordinates to avoid confusion
+            * */
+            List<Point> existingCoordinatesButItsOwn = getExistingCoordinates(probe.getPlanet());
+            existingCoordinatesButItsOwn.remove(probe.getCoordinate());
+
+            probe.move(command, existingCoordinatesButItsOwn);
             return Optional.of(probe);
         }).orElse(Optional.empty());
     }
@@ -71,7 +82,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet) {
         return instructions
                 .stream()
-                .map(probe -> reallocateToNewPosition(probe.getProbeId(), probe.getCommand()))
+                .map(probe -> relocateToNewPosition(probe.getProbeId(), probe.getCommand()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

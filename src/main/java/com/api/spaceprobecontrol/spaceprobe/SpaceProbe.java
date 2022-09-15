@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.awt.Point;
+import java.util.List;
 
 @Entity
 @Table(name = "space_probe")
@@ -57,7 +58,7 @@ public class SpaceProbe {
         return planet;
     }
 
-    public void move(String command) {
+    public void move(String command, List<Point> existingCoordinatesButItsOwn) {
         for (char c : command.toCharArray()) {
             if (c == 'L' || c == 'R')
                 this.pointsTo = this.pointsTo.nextSide(c);
