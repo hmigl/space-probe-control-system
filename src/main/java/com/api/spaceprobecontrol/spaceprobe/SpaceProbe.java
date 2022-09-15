@@ -62,6 +62,45 @@ public class SpaceProbe {
         for (char c : command.toCharArray()) {
             if (c == 'L' || c == 'R')
                 this.pointsTo = this.pointsTo.nextSide(c);
+            else carefullyRelocate(pointsTo, existingCoordinatesButItsOwn);
+        }
+    }
+
+    private void carefullyRelocate(Directions pointsTo, List<Point> existingCoordinatesButItsOwn) {
+        if (pointsTo == Directions.NORTH) { // immutable x, y += 1
+            int y = getCoordinate().y == getPlanet().getyAxis() ? 1 : getCoordinate().y + 1;
+
+            Point nextStep = new Point(getCoordinate().x, y);
+            if (existingCoordinatesButItsOwn.contains(nextStep))
+                return;
+            this.coordinate.setLocation(nextStep);
+        }
+
+        else if (pointsTo == Directions.SOUTH) { // immutable x, y -= 1
+            int y = getCoordinate().y == 1 ? getPlanet().getyAxis() : getCoordinate().y - 1;
+
+            Point nextStep = new Point(getCoordinate().x, y);
+            if (existingCoordinatesButItsOwn.contains(nextStep))
+                return;
+            this.coordinate.setLocation(nextStep);
+        }
+
+        else if (pointsTo == Directions.EAST) { // x += 1, immutable y
+            int x = getCoordinate().x == getPlanet().getxAxis() ? 1 : getCoordinate().x + 1;
+
+            Point nextStep = new Point(x, getCoordinate().y);
+            if (existingCoordinatesButItsOwn.contains(nextStep))
+                return;
+            this.coordinate.setLocation(nextStep);
+        }
+
+        else { // x -= 1, immutable y
+            int x = getCoordinate().x == 1 ? getPlanet().getxAxis() : getCoordinate().x - 1;
+
+            Point nextStep = new Point(x, getCoordinate().y);
+            if (existingCoordinatesButItsOwn.contains(nextStep))
+                return;
+            this.coordinate.setLocation(nextStep);
         }
     }
 }
