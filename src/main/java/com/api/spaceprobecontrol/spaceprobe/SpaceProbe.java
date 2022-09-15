@@ -58,5 +58,9 @@ public class SpaceProbe {
     }
 
     public void move(String command) {
+        for (char c : command.toCharArray()) {
+            if (c == 'L' || c == 'R')
+                this.pointsTo = this.pointsTo.nextSide(c);
+        }
     }
 }
