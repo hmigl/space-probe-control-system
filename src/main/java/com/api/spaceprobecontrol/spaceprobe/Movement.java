@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.util.List;
 
 public interface Movement {
-    void moveTowardsNorth(List<Point> coordinates);
-    void moveTowardsSouth(List<Point> coordinates);
-    void moveTowardsEast(List<Point> coordinates);
-    void moveTowardsWest(List<Point> coordinates);
+    boolean moveTowardsNorth(List<Point> coordinates);
+    boolean moveTowardsSouth(List<Point> coordinates);
+    boolean moveTowardsEast(List<Point> coordinates);
+    boolean moveTowardsWest(List<Point> coordinates);
 }
