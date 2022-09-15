@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,8 +60,20 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         return spaceProbeRepository.saveAll(entities);
     }
 
+    private Optional<SpaceProbe> reallocateToNewPosition(Long id, String command) {
+        return spaceProbeRepository.findById(id).map(probe -> {
+            probe.move(command);
+            return Optional.of(probe);
+        }).orElse(Optional.empty());
+    }
+
     @Override
     public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet) {
-        return null;
+        return instructions
+                .stream()
+                .map(probe -> reallocateToNewPosition(probe.getProbeId(), probe.getCommand()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

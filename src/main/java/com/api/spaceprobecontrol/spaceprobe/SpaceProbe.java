@@ -56,4 +56,7 @@ public class SpaceProbe {
     public Planet getPlanet() {
         return planet;
     }
+
+    public void move(String command) {
+    }
 }
