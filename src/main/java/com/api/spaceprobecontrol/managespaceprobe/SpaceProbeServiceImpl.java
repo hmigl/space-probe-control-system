@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.managespaceprobe.impl;
+package com.api.spaceprobecontrol.managespaceprobe;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
