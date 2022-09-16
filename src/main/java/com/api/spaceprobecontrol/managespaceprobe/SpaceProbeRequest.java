@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.spaceprobe;
+package com.api.spaceprobecontrol.managespaceprobe;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

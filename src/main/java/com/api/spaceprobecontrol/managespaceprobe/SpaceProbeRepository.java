@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.spaceprobe;
+package com.api.spaceprobecontrol.managespaceprobe;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.spaceprobe;
+package com.api.spaceprobecontrol.managespaceprobe;
 
 import com.api.spaceprobecontrol.shared.ExistentId;
 import com.fasterxml.jackson.annotation.JsonProperty;

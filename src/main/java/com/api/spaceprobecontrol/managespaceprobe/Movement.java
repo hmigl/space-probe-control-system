@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.spaceprobe;
+package com.api.spaceprobecontrol.managespaceprobe;
 
 import java.awt.Point;
 import java.util.List;

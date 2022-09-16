@@ -1,8 +1,8 @@
-package com.api.spaceprobecontrol.spaceprobe.impl;
+package com.api.spaceprobecontrol.managespaceprobe.impl;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.*;
+import com.api.spaceprobecontrol.managespaceprobe.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
