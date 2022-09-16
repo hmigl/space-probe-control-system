@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/probes")
 public class SpaceProbeController {
 
     private final PlanetRepository planetRepository;
@@ -21,9 +22,9 @@ public class SpaceProbeController {
         this.spaceProbeService = spaceProbeService;
     }
 
-    @PostMapping("/planets/{id}/probes")
-    ResponseEntity<?> registerNewSpaceProbe(@PathVariable("id") Long id,
-                                            @RequestBody @Valid DesignationSpaceProbeRequest request) {
+    @PostMapping
+    ResponseEntity<?> registerNewSpaceProbe(@RequestBody @Valid DesignationSpaceProbeRequest request,
+                                            @RequestParam("planetId") Long id) {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
         return possiblePlanet.map(planet -> {
@@ -34,6 +35,19 @@ public class SpaceProbeController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(spaceProbeService.saveAll(request.toModel(planet)));
 
-        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PutMapping
+    ResponseEntity<?> moveSpaceProbe(@RequestBody @Valid MoveSpaceProbeRequest request,
+                                     @RequestParam("planetId") Long id) {
+        Optional<Planet> possiblePlanet = planetRepository.findById(id);
+
+        return possiblePlanet.map(planet -> {
+            List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(request.getInstructions(), planet);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(spaceProbeService.saveAll(repositionedSpaceProbes));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

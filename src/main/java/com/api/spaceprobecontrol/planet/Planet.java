@@ -1,12 +1,14 @@
 package com.api.spaceprobecontrol.planet;
 
 import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
+import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Entity
 @Table(name = "planet")
@@ -63,5 +65,14 @@ public class Planet {
                 ", xAxis=" + xAxis +
                 ", yAxis=" + yAxis +
                 '}';
+    }
+
+    public boolean hasSuitableBorders(List<SpaceProbeRequest> aspirantProbes) {
+        Predicate<SpaceProbeRequest> respectsXAxis = aspirantProbe -> aspirantProbe.getState().getxAxis() <= this.xAxis;
+        Predicate<SpaceProbeRequest> respectsYAxis = aspirantProbe -> aspirantProbe.getState().getyAxis() <= this.yAxis;
+
+        return aspirantProbes
+                .stream()
+                .allMatch(respectsXAxis.and(respectsYAxis));
     }
 }

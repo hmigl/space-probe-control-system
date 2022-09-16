@@ -2,17 +2,15 @@ package com.api.spaceprobecontrol.spaceprobe.impl;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRepository;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeRequest;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
+import com.api.spaceprobecontrol.spaceprobe.*;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,23 +24,18 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         this.spaceProbeRepository = spaceProbeRepository;
     }
 
-    private boolean allWithinPlanetBorders(List<SpaceProbeRequest> spaceProbes, Planet planet) {
-        Predicate<SpaceProbeRequest> respectsXAxis = p -> p.getState().getxAxis() <= planet.getxAxis();
-        Predicate<SpaceProbeRequest> respectsYAxis = p -> p.getState().getyAxis() <= planet.getyAxis();
-
-        return spaceProbes
-                .stream()
-                .allMatch(respectsXAxis.and(respectsYAxis));
-    }
-
-    private boolean allWontClash(List<SpaceProbeRequest> requests, Planet planet) {
-        List<Point> existingCoordinates = planet
+    private List<Point> getExistingCoordinates(Planet planet) {
+        return planet
                 .getSpaceProbes()
                 .stream()
                 .map(SpaceProbe::getCoordinate)
                 .collect(Collectors.toList());
+    }
 
-        List<Point> possibleNewCoordinates = requests
+    private boolean allWontClash(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+        List<Point> existingCoordinates = getExistingCoordinates(planet);
+
+        List<Point> possibleNewCoordinates = aspirantProbes
                 .stream()
                 .map(coordinate -> new Point(coordinate.getState().getxAxis(), coordinate.getState().getyAxis()))
                 .collect(Collectors.toList());
@@ -56,8 +49,8 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public boolean allCanLand(List<SpaceProbeRequest> requests, Planet planet) {
-        return allWithinPlanetBorders(requests, planet) && allWontClash(requests, planet);
+    public boolean allCanLand(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+        return planet.hasSuitableBorders(aspirantProbes) && allWontClash(aspirantProbes, planet);
     }
 
     @Override
@@ -66,7 +59,32 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
+    @Transactional
     public List<SpaceProbe> saveAll(Iterable<SpaceProbe> entities) {
         return spaceProbeRepository.saveAll(entities);
+    }
+
+    private Optional<SpaceProbe> relocateToNewPosition(Long id, String command) {
+        return spaceProbeRepository.findById(id).map(probe -> {
+            /*
+            * The space probe has to only worry about other probes' coordinates, so remove
+            * its own coordinates to avoid confusion
+            * */
+            List<Point> existingCoordinatesButItsOwn = getExistingCoordinates(probe.getPlanet());
+            existingCoordinatesButItsOwn.remove(probe.getCoordinate());
+
+            probe.move(command, existingCoordinatesButItsOwn);
+            return Optional.of(probe);
+        }).orElse(Optional.empty());
+    }
+
+    @Override
+    public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet) {
+        return instructions
+                .stream()
+                .map(probe -> relocateToNewPosition(probe.getProbeId(), probe.getCommand()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }
