@@ -32,12 +32,12 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
                 .collect(Collectors.toList());
     }
 
-    private boolean allWontClash(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+    private boolean allWontClash(List<LandSpaceProbeRequest.LandState> aspirantProbes, Planet planet) {
         List<Point> existingCoordinates = getExistingCoordinates(planet);
 
         List<Point> possibleNewCoordinates = aspirantProbes
                 .stream()
-                .map(coordinate -> new Point(coordinate.getState().getxAxis(), coordinate.getState().getyAxis()))
+                .map(coordinate -> new Point(coordinate.getxAxis(), coordinate.getyAxis()))
                 .collect(Collectors.toList());
 
         // List may have duplicates, compare their size to found out
@@ -49,7 +49,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public boolean allCanLand(List<SpaceProbeRequest> aspirantProbes, Planet planet) {
+    public boolean allCanLand(List<LandSpaceProbeRequest.LandState> aspirantProbes, Planet planet) {
         return planet.hasSuitableBorders(aspirantProbes) && allWontClash(aspirantProbes, planet);
     }
 

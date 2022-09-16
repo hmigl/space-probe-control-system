@@ -23,7 +23,7 @@ public class OperateSpaceProbeController {
     }
 
     @PostMapping
-    ResponseEntity<?> registerNewSpaceProbe(@RequestBody @Valid DesignationSpaceProbeRequest request,
+    ResponseEntity<?> registerNewSpaceProbe(@RequestBody @Valid LandSpaceProbeRequest request,
                                             @RequestParam("planetId") Long id) {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 

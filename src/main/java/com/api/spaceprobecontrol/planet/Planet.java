@@ -1,7 +1,7 @@
 package com.api.spaceprobecontrol.planet;
 
+import com.api.spaceprobecontrol.managespaceprobe.LandSpaceProbeRequest;
 import com.api.spaceprobecontrol.managespaceprobe.SpaceProbe;
-import com.api.spaceprobecontrol.managespaceprobe.SpaceProbeRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -67,9 +67,9 @@ public class Planet {
                 '}';
     }
 
-    public boolean hasSuitableBorders(List<SpaceProbeRequest> aspirantProbes) {
-        Predicate<SpaceProbeRequest> respectsXAxis = aspirantProbe -> aspirantProbe.getState().getxAxis() <= this.xAxis;
-        Predicate<SpaceProbeRequest> respectsYAxis = aspirantProbe -> aspirantProbe.getState().getyAxis() <= this.yAxis;
+    public boolean hasSuitableBorders(List<LandSpaceProbeRequest.LandState> aspirantProbes) {
+        Predicate<LandSpaceProbeRequest.LandState> respectsXAxis = aspirantProbe -> aspirantProbe.getxAxis() <= this.xAxis;
+        Predicate<LandSpaceProbeRequest.LandState> respectsYAxis = aspirantProbe -> aspirantProbe.getyAxis() <= this.yAxis;
 
         return aspirantProbes
                 .stream()
