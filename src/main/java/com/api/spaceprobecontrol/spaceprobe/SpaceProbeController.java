@@ -35,7 +35,7 @@ public class SpaceProbeController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(spaceProbeService.saveAll(request.toModel(planet)));
 
-        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PutMapping
@@ -47,7 +47,7 @@ public class SpaceProbeController {
             List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(request.getInstructions(), planet);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body("Saul Goodman :)");
-        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("There's no planet with id " + id));
+                    .body(spaceProbeService.saveAll(repositionedSpaceProbes));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
