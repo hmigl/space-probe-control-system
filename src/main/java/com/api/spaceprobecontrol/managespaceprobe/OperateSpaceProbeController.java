@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/probes")
-public class SpaceProbeController {
+public class OperateSpaceProbeController {
 
     private final PlanetRepository planetRepository;
     private final SpaceProbeService spaceProbeService;
 
-    public SpaceProbeController(PlanetRepository planetRepository, SpaceProbeService spaceProbeService) {
+    public OperateSpaceProbeController(PlanetRepository planetRepository, SpaceProbeService spaceProbeService) {
         this.planetRepository = planetRepository;
         this.spaceProbeService = spaceProbeService;
     }
