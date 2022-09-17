@@ -1,4 +1,4 @@
-package com.api.spaceprobecontrol.managespaceprobe;
+package com.api.spaceprobecontrol.spaceprobe;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.fasterxml.jackson.annotation.JsonIgnore;

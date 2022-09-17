@@ -1,7 +1,7 @@
 package com.api.spaceprobecontrol.planet;
 
-import com.api.spaceprobecontrol.managespaceprobe.LandSpaceProbeRequest;
-import com.api.spaceprobecontrol.managespaceprobe.SpaceProbe;
+import com.api.spaceprobecontrol.spaceprobe.LandSpaceProbeRequest;
+import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
