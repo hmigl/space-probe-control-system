@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface SpaceProbeService {
     boolean allCanLand(List<LandSpaceProbeRequest.LandState> request, Planet planet);
-    boolean planetExistsById(Long id);
     List<SpaceProbe> saveAll(Iterable<SpaceProbe> entities);
     List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet);
 }

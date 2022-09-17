@@ -1,12 +1,10 @@
 package com.api.spaceprobecontrol.managespaceprobe;
 
 import com.api.spaceprobecontrol.planet.Planet;
-import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.managespaceprobe.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.Point;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -16,11 +14,9 @@ import java.util.stream.Collectors;
 @Service
 public class SpaceProbeServiceImpl implements SpaceProbeService {
 
-    private final PlanetRepository planetRepository;
     private final SpaceProbeRepository spaceProbeRepository;
 
-    public SpaceProbeServiceImpl(PlanetRepository planetRepository, SpaceProbeRepository spaceProbeRepository) {
-        this.planetRepository = planetRepository;
+    public SpaceProbeServiceImpl(SpaceProbeRepository spaceProbeRepository) {
         this.spaceProbeRepository = spaceProbeRepository;
     }
 
@@ -51,11 +47,6 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     @Override
     public boolean allCanLand(List<LandSpaceProbeRequest.LandState> aspirantProbes, Planet planet) {
         return planet.hasSuitableBorders(aspirantProbes) && allWontClash(aspirantProbes, planet);
-    }
-
-    @Override
-    public boolean planetExistsById(Long id) {
-        return planetRepository.existsById(id);
     }
 
     @Override
