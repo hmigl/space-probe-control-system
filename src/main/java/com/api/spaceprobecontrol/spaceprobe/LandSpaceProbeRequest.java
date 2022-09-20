@@ -52,6 +52,12 @@ public class LandSpaceProbeRequest {
         @NotNull
         private Directions pointsTo;
 
+        public LandState(Integer xAxis, Integer yAxis, Directions pointsTo) {
+            this.xAxis = xAxis;
+            this.yAxis = yAxis;
+            this.pointsTo = pointsTo;
+        }
+
         public Integer getxAxis() {
             return xAxis;
         }
