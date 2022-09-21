@@ -2,10 +2,7 @@ package com.api.spaceprobecontrol.spaceprobemanagement;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.Directions;
-import com.api.spaceprobecontrol.spaceprobe.LandSpaceProbeRequest;
-import com.api.spaceprobecontrol.spaceprobe.OperateSpaceProbeController;
-import com.api.spaceprobecontrol.spaceprobe.SpaceProbeService;
+import com.api.spaceprobecontrol.spaceprobe.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.Validator;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OperateSpaceProbeController.class)
@@ -32,6 +31,8 @@ class OperateSpaceProbeControllerTest {
     private PlanetRepository planetRepository;
     @MockBean
     private SpaceProbeService spaceProbeService;
+    @MockBean(name = "mvcValidator")
+    private Validator mockValidator;
 
     private static final String URI = "/api/probes";
 
@@ -91,5 +92,26 @@ class OperateSpaceProbeControllerTest {
                         .content(json)
                         .param("planetId", "42"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Should move space probe")
+    void shouldMoveSpaceProbe() throws Exception {
+        var planet = new Planet(5, 5);
+        var request = new MoveSpaceProbeRequest(List.of(
+                new MoveSpaceProbeRequest.MovementDemand(1L, "LMLMLMLMM"),
+                new MoveSpaceProbeRequest.MovementDemand(2L, "MMRMMRMRRML"))
+        );
+        String json = new ObjectMapper().writeValueAsString(request);
+
+        given(planetRepository.findById(any()))
+                .willReturn(Optional.of(planet));
+
+        mockMvc.perform(put(URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                        .param("planetId", "1"))
+                .andExpect(status().isCreated());
+        verify(spaceProbeService, times(1)).saveAll(anyIterable());
     }
 }
