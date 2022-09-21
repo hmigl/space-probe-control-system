@@ -3,17 +3,27 @@ package com.api.spaceprobecontrol.spaceprobe;
 import com.api.spaceprobecontrol.planet.Planet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class SpaceProbeServiceImplTest {
-    @MockBean
-    private SpaceProbeRepository repository;
-    private final SpaceProbeServiceImpl spaceProbeService = new SpaceProbeServiceImpl(repository);
+    @Mock
+    private SpaceProbeRepository spaceProbeRepository;
+    @InjectMocks
+    private SpaceProbeServiceImpl spaceProbeService;
 
     @Test
     @DisplayName("Shouldn't land due to repeated new coordinates")
@@ -53,5 +63,30 @@ class SpaceProbeServiceImplTest {
         );
 
         assertTrue(spaceProbeService.allCanLand(aspirantProbes, planet));
+    }
+
+    @Test
+    @DisplayName("Should move space probes")
+    void shouldMoveSpaceProbes() {
+        var planet = new Planet(5, 5);
+        List<MoveSpaceProbeRequest.MovementDemand> instructions = List.of(
+                new MoveSpaceProbeRequest.MovementDemand(1L, "LMLMLMLMM"),
+                new MoveSpaceProbeRequest.MovementDemand(2L, "MMRMMRMRRML")
+        );
+
+        given(spaceProbeRepository.findById(1L))
+                .willReturn(Optional.of(new SpaceProbe(new Point(1, 2), Directions.NORTH, planet)));
+        given(spaceProbeRepository.findById(2L))
+                .willReturn(Optional.of(new SpaceProbe(new Point(3, 3), Directions.EAST, planet)));
+
+        List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(instructions, planet);
+
+        // verify their final positions
+        assertEquals(new Point(1, 3), repositionedSpaceProbes.get(0).getCoordinate());
+        assertEquals(Directions.NORTH, repositionedSpaceProbes.get(0).getPointsTo());
+        assertEquals(new Point(5, 1), repositionedSpaceProbes.get(1).getCoordinate());
+        assertEquals(Directions.NORTH, repositionedSpaceProbes.get(1).getPointsTo());
+
+        verify(spaceProbeRepository, times(2)).findById(any());
     }
 }
