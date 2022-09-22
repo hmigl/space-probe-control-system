@@ -88,4 +88,13 @@ class SpaceProbeServiceImplTest {
 
         verify(spaceProbeRepository, times(2)).findById(any());
     }
+
+    @Test
+    @DisplayName("Shouldn't move when collision is imminent")
+    void shouldNotMoveWhenImminentCollision() {
+        var spaceProbe = new SpaceProbe(new Point(2, 2), Directions.WEST, new Planet(3, 3));
+
+        spaceProbe.move("M", List.of(new Point(1, 2)));
+        assertEquals(new Point(2, 2), spaceProbe.getCoordinate());
+    }
 }
