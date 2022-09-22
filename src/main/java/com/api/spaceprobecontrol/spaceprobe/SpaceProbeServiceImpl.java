@@ -20,17 +20,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         this.spaceProbeRepository = spaceProbeRepository;
     }
 
-    private List<Point> getExistingCoordinates(Planet planet) {
-        return planet
-                .getSpaceProbes()
-                .stream()
-                .map(SpaceProbe::getCoordinate)
-                .collect(Collectors.toList());
-    }
-
     private boolean allWontClash(List<LandSpaceProbeRequest.LandState> aspirantProbes, Planet planet) {
-        List<Point> existingCoordinates = getExistingCoordinates(planet);
-
         List<Point> possibleNewCoordinates = aspirantProbes
                 .stream()
                 .map(coordinate -> new Point(coordinate.getxAxis(), coordinate.getyAxis()))
@@ -41,6 +31,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
         if (uniquePossibleNewCoords.size() != possibleNewCoordinates.size()) return false;
 
         // Mutate 'existingCoordinates' to check for possible conflicts
+        List<Point> existingCoordinates = planet.accessBusyCoordinates();
         return !existingCoordinates.removeAll(possibleNewCoordinates);
     }
 
@@ -61,7 +52,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
             * The space probe has to only worry about other probes' coordinates, so remove
             * its own coordinates to avoid confusion
             * */
-            List<Point> existingCoordinatesButItsOwn = getExistingCoordinates(probe.getPlanet());
+            List<Point> existingCoordinatesButItsOwn = probe.getPlanet().accessBusyCoordinates();
             existingCoordinatesButItsOwn.remove(probe.getCoordinate());
 
             probe.move(command, existingCoordinatesButItsOwn);

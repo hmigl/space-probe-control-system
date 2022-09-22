@@ -6,9 +6,11 @@ import com.api.spaceprobecontrol.spaceprobe.SpaceProbe;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "planet")
@@ -74,5 +76,12 @@ public class Planet {
         return aspirantProbes
                 .stream()
                 .allMatch(respectsXAxis.and(respectsYAxis));
+    }
+
+    public List<Point> accessBusyCoordinates() {
+        return this.spaceProbes
+                .stream()
+                .map(SpaceProbe::getCoordinate)
+                .collect(Collectors.toList());
     }
 }
