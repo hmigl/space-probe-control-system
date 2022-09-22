@@ -61,7 +61,7 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
     }
 
     @Override
-    public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions, Planet planet) {
+    public List<SpaceProbe> processInstructions(List<MoveSpaceProbeRequest.MovementDemand> instructions) {
         return instructions
                 .stream()
                 .map(probe -> relocateToNewPosition(probe.getProbeId(), probe.getCommand()))

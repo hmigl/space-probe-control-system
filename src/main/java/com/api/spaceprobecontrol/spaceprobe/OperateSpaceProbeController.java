@@ -44,7 +44,7 @@ public class OperateSpaceProbeController {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
         return possiblePlanet.map(planet -> {
-            List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(request.getInstructions(), planet);
+            List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(request.getInstructions());
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(spaceProbeService.saveAll(repositionedSpaceProbes));

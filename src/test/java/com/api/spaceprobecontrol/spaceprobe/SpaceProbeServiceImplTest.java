@@ -79,8 +79,7 @@ class SpaceProbeServiceImplTest {
         given(spaceProbeRepository.findById(2L))
                 .willReturn(Optional.of(new SpaceProbe(new Point(3, 3), Directions.EAST, planet)));
 
-        List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(instructions, planet);
-
+        List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(instructions);
         // verify their final positions
         assertEquals(new Point(1, 3), repositionedSpaceProbes.get(0).getCoordinate());
         assertEquals(Directions.NORTH, repositionedSpaceProbes.get(0).getPointsTo());
