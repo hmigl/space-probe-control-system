@@ -23,7 +23,7 @@ class SpaceProbeServiceImplTest {
     @Mock
     private SpaceProbeRepository spaceProbeRepository;
     @InjectMocks
-    private SpaceProbeServiceImpl spaceProbeService;
+    private SpaceProbeService spaceProbeService;
 
     @Test
     @DisplayName("Shouldn't land due to repeated new coordinates")
