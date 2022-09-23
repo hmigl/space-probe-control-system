@@ -69,4 +69,9 @@ public class SpaceProbeServiceImpl implements SpaceProbeService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Optional<SpaceProbe> findById(Long id) {
+        return spaceProbeRepository.findById(id);
+    }
 }

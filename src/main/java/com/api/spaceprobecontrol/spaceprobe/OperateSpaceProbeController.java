@@ -38,6 +38,22 @@ public class OperateSpaceProbeController {
         }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @GetMapping
+    ResponseEntity<?> retrieveSpaceProbesByPlanet(@RequestParam("planetId") Long id) {
+        Optional<Planet> possiblePlanet = planetRepository.findById(id);
+
+        return possiblePlanet.map(planet -> ResponseEntity.status(HttpStatus.OK).body(planet.getSpaceProbes()))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> retrieveSpecificSpaceProbe(@PathVariable Long id) {
+        Optional<SpaceProbe> possibleProbe = spaceProbeService.findById(id);
+
+        return possibleProbe.map(probe -> ResponseEntity.status(HttpStatus.OK).body(probe))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
     @PutMapping
     ResponseEntity<?> moveSpaceProbe(@RequestBody @Valid MoveSpaceProbeRequest request,
                                      @RequestParam("planetId") Long id) {
