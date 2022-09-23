@@ -84,4 +84,13 @@ public class Planet {
                 .map(SpaceProbe::getCoordinate)
                 .collect(Collectors.toList());
     }
+
+    public boolean hasSpaceProbes() {
+        return !spaceProbes.isEmpty();
+    }
+
+    public void reshape(RegisterPlanetRequest request) {
+        this.xAxis = request.getxAxis();
+        this.yAxis = request.getyAxis();
+    }
 }

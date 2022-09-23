@@ -2,15 +2,11 @@ package com.api.spaceprobecontrol.planet;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/planets")
@@ -43,5 +39,17 @@ public class PlanetController {
         return repository.findById(id)
                 .map(planet -> ResponseEntity.status(HttpStatus.OK).body(planet))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    ResponseEntity<?> updatePlanet(@RequestBody @Valid RegisterPlanetRequest request, @PathVariable Long id) {
+        Optional<Planet> possiblePlanet = repository.findById(id);
+
+        return possiblePlanet.map(planet -> {
+            if (planet.hasSpaceProbes()) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            planet.reshape(request);
+            return ResponseEntity.status(HttpStatus.OK).body(repository.save(planet));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
