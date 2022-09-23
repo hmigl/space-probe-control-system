@@ -66,4 +66,24 @@ public class OperateSpaceProbeController {
                     .body(spaceProbeService.saveAll(repositionedSpaceProbes));
         }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @DeleteMapping
+    ResponseEntity<?> deleteAllSpaceProbes() {
+        List<SpaceProbe> spaceProbes = spaceProbeService.findAll();
+
+        if (spaceProbes.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no space probes to delete");
+        spaceProbeService.deleteAll();
+        return ResponseEntity.status(HttpStatus.OK).body("Space probes were deleted successfully");
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteSpaceProbe(@PathVariable Long id) {
+        Optional<SpaceProbe> possibleProbe = spaceProbeService.findById(id);
+
+        return possibleProbe.map(probe -> {
+            spaceProbeService.delete(probe);
+            return ResponseEntity.status(HttpStatus.OK).body("Space Probe "+id+" deleted successfully");
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 }

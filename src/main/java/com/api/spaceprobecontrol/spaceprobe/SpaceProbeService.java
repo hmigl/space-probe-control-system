@@ -39,11 +39,6 @@ public class SpaceProbeService {
         return planet.hasSuitableBorders(aspirantProbes) && allWontClash(aspirantProbes, planet);
     }
 
-    @Transactional
-    public List<SpaceProbe> saveAll(Iterable<SpaceProbe> entities) {
-        return spaceProbeRepository.saveAll(entities);
-    }
-
     private Optional<SpaceProbe> relocateToNewPosition(Long id, String command) {
         return spaceProbeRepository.findById(id).map(probe -> {
             /*
@@ -67,7 +62,26 @@ public class SpaceProbeService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public List<SpaceProbe> saveAll(Iterable<SpaceProbe> entities) {
+        return spaceProbeRepository.saveAll(entities);
+    }
+
     public Optional<SpaceProbe> findById(Long id) {
         return spaceProbeRepository.findById(id);
+    }
+
+    public List<SpaceProbe> findAll() {
+        return spaceProbeRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteAll() {
+        spaceProbeRepository.deleteAll();
+    }
+
+    @Transactional
+    public void delete(SpaceProbe probe) {
+        spaceProbeRepository.delete(probe);
     }
 }
