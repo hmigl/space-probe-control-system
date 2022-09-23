@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +51,26 @@ public class PlanetController {
             if (planet.hasSpaceProbes()) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             planet.reshape(request);
             return ResponseEntity.status(HttpStatus.OK).body(repository.save(planet));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @DeleteMapping
+    @Transactional
+    ResponseEntity<?> deleteAllPlanets() {
+        List<Planet> planets = (List<Planet>) repository.findAll();
+
+        if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets to delete");
+        repository.deleteAll(); return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    ResponseEntity<?> deletePlanet(@PathVariable Long id) {
+        Optional<Planet> possiblePlanet = repository.findById(id);
+
+        return possiblePlanet.map(planet -> {
+            repository.delete(planet);
+            return ResponseEntity.status(HttpStatus.OK).body("Planet "+id+" deleted successfully");
         }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

@@ -28,7 +28,7 @@ public class Planet {
     @Column(name = "y_axis", nullable = false)
     private int yAxis;
 
-    @OneToMany(mappedBy = "planet", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "planet", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<SpaceProbe> spaceProbes = new ArrayList<>();
 
     /**
