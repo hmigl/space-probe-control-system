@@ -14,10 +14,8 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -77,5 +75,41 @@ class PlanetControllerTest {
                 .andExpect(status().isCreated());
 
         verify(repository, times(1)).save(any(Planet.class));
+    }
+
+    @Test
+    @DisplayName("Shouldn't reshape planet")
+    void shouldNotReshapePlanet() throws Exception {
+        var planetSpy = spy(new Planet(1, 1));
+
+        given(repository.findById(any()))
+                .willReturn(Optional.of(planetSpy));
+        doReturn(true)
+                .when(planetSpy).hasSpaceProbes();
+
+        mockMvc.perform(put(URI + "/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"xAxis\": 2, \"yAxis\": 2}"))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    @DisplayName("Should reshape planet")
+    void shouldReshapePlanet() throws Exception {
+        var planetSpy = spy(new Planet(3, 3));
+
+        given(repository.findById(any()))
+                .willReturn(Optional.of(planetSpy));
+        doReturn(false)
+                .when(planetSpy).hasSpaceProbes();
+
+        mockMvc.perform(put(URI + "/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"xAxis\": 2, \"yAxis\": 2}"))
+                .andExpect(status().isOk());
+
+        verify(planetSpy).reshape(any(RegisterPlanetRequest.class));
+        verify(repository).save(any(Planet.class));
     }
 }
