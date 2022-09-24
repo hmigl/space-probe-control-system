@@ -112,4 +112,37 @@ class PlanetControllerTest {
         verify(planetSpy).reshape(any(RegisterPlanetRequest.class));
         verify(repository).save(any(Planet.class));
     }
+
+    @Test
+    @DisplayName("Should delete all planets")
+    void shouldDeleteAllPlanets() throws Exception {
+        given(repository.findAll())
+                .willReturn(List.of(new Planet(1, 1), new Planet(2, 2)));
+
+        mockMvc.perform(delete(URI))
+                .andExpect(status().isOk());
+
+        verify(repository).deleteAll();
+    }
+
+    @Test
+    @DisplayName("Should find no planets to delete")
+    void shouldFindNoPlanetsToDelete() throws Exception {
+        mockMvc.perform(delete(URI))
+                .andExpect(status().isNotFound());
+
+        verify(repository, times(0)).deleteAll();
+    }
+
+    @Test
+    @DisplayName("Should delete specific planet")
+    void shouldDeleteSpecificPlanet() throws Exception {
+        given(repository.findById(any()))
+                .willReturn(Optional.of(new Planet(1, 1)));
+
+        mockMvc.perform(delete(URI + "/{id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(repository).delete(any(Planet.class));
+    }
 }
