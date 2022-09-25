@@ -146,6 +146,34 @@ class OperateSpaceProbeControllerTest {
                         .content(json)
                         .param("planetId", "1"))
                 .andExpect(status().isCreated());
+
         verify(spaceProbeService, times(1)).saveAll(anyIterable());
+    }
+
+    @Test
+    @DisplayName("Should delete all space probes")
+    void shouldDeleteAllSpaceProbes() throws Exception {
+        given(spaceProbeService.findAll())
+                .willReturn(List.of(
+                        new SpaceProbe(new Point(1, 1), Directions.NORTH, new Planet(1,1)),
+                        new SpaceProbe(new Point(1, 1), Directions.SOUTH, new Planet(2,2))
+                ));
+
+        mockMvc.perform(delete(URI))
+                .andExpect(status().isOk());
+
+        verify(spaceProbeService).deleteAll();
+    }
+
+    @Test
+    @DisplayName("Should delete specific space probe")
+    void shouldDeleteSpecificSpaceProbe() throws Exception {
+        given(spaceProbeService.findById(any()))
+                .willReturn(Optional.of(new SpaceProbe(new Point(1, 1), Directions.EAST, new Planet(1, 1))));
+
+        mockMvc.perform(delete(URI + "/{id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(spaceProbeService).delete(any(SpaceProbe.class));
     }
 }
