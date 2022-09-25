@@ -42,8 +42,10 @@ public class OperateSpaceProbeController {
     ResponseEntity<?> retrieveSpaceProbesByPlanet(@RequestParam("planetId") Long id) {
         Optional<Planet> possiblePlanet = planetRepository.findById(id);
 
-        return possiblePlanet.map(planet -> ResponseEntity.status(HttpStatus.OK).body(planet.getSpaceProbes()))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return possiblePlanet.map(planet -> {
+            if (!planet.hasSpaceProbes()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no space probes");
+            return ResponseEntity.status(HttpStatus.OK).body(planet.getSpaceProbes());
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping("/{id}")

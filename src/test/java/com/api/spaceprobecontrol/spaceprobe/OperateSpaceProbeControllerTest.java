@@ -2,7 +2,6 @@ package com.api.spaceprobecontrol.spaceprobe;
 
 import com.api.spaceprobecontrol.planet.Planet;
 import com.api.spaceprobecontrol.planet.PlanetRepository;
-import com.api.spaceprobecontrol.spaceprobe.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,14 +12,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.Validator;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OperateSpaceProbeController.class)
@@ -92,6 +93,39 @@ class OperateSpaceProbeControllerTest {
                         .content(json)
                         .param("planetId", "42"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Should retrieve all space probes")
+    void shouldRetrieveAllSpaceProbes() throws Exception {
+        var planetSpy = spy(new Planet(3, 3));
+        given(planetRepository.findById(any()))
+                .willReturn(Optional.of(planetSpy));
+        doReturn(true)
+                .when(planetSpy).hasSpaceProbes();
+        doReturn(List.of(
+                new SpaceProbe(new Point(1, 1), Directions.NORTH, planetSpy),
+                new SpaceProbe(new Point(2, 2), Directions.SOUTH, planetSpy))
+        ).when(planetSpy).getSpaceProbes();
+
+        mockMvc.perform(get(URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("planetId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(2)));
+    }
+
+    @Test
+    @DisplayName("Should retrieve specific space probe")
+    void shouldRetrieveSpecificSpaceProbe() throws Exception {
+        given(spaceProbeService.findById(any()))
+                .willReturn(Optional.of(new SpaceProbe(new Point(4, 2), Directions.NORTH, new Planet(5,5))));
+
+        mockMvc.perform(get(URI + "/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.coordinate.x").value(4))
+                .andExpect(jsonPath("$.coordinate.y").value(2))
+                .andExpect(jsonPath("$.pointsTo").value("NORTH"));
     }
 
     @Test
