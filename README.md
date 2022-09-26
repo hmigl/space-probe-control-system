@@ -12,7 +12,15 @@ Contents
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Overview
-about project
+A simple and easy-to-use REST API. It aims to make it possible to send landing and movement instructions to space probes.
+
+This project uses
+- JDK 11
+- Maven
+- Spring Boot
+- Spring Data JPA + Hibernate
+- PostgreSQL
+- JUnit5, Mockito and MockMVC
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Getting Started
@@ -21,8 +29,7 @@ docker/insomnia stuff
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Usage and Examples
 
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-## API Operations
+### API Operations
 
 > **Warning!**
 > All resources below are located after `/api`
@@ -38,18 +45,18 @@ space probe yada yada
 
 | Resource     | POST                              | GET                                      | PUT                                                        | DELETE                     |
 |--------------|-----------------------------------|------------------------------------------|------------------------------------------------------------|----------------------------|
-| /probes      | Land one or<br>more space probes* | Retrieve all<br>space probes             | Send movement instructions<br>to one or more space probes* | Remove all<br>space probes |
+| /probes      | Land one or<br>more space probes* | Retrieve all<br>space probes*            | Send movement instructions<br>to one or more space probes* | Remove all<br>space probes |
 | /probes/{id} | Error                             | Retrieve details for<br>space probe {id} | Error                                                      | Remove space probe {id}    |
 
 > *Requires the query string "planetId", e.g., `POST /api/probes?planetId=1` will land
 > the space probes at the planet whose id is 1
 
-## Request Samples
+### Request Samples
 
 ##### `POST /api/planets`
 
-- xAxis -> positive integer; planet length
-- yAxis -> positive integer; planet height
+- xAxis -> planet length
+- yAxis -> planet height
 ```json
 {
   "xAxis": 5,
