@@ -14,7 +14,7 @@ Contents
 ## Overview
 A simple and easy-to-use REST API. It aims to make it possible to send landing and movement instructions to space probes.
 
-This project uses
+This project uses:
 - JDK 11
 - Maven
 - Spring Boot
@@ -24,7 +24,14 @@ This project uses
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Getting Started
-docker/insomnia stuff
+After cloning this repository, run:
+```shell
+docker compose up -d
+```
+Wait a few minutes and it's done! The API will be running at `http://localhost:8080/`
+
+> Make sure you've got a tool like [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/)
+> in order to perform HTTP requests!
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Usage and Examples
