@@ -3,7 +3,7 @@ package com.api.spaceprobecontrol.spaceprobe;
 public enum Directions {
     NORTH {
         @Override
-        Directions nextSide(char c) {
+        Directions alterOrientation(char c) {
             if (c == 'L')
                 return WEST;
             return EAST;
@@ -11,7 +11,7 @@ public enum Directions {
     },
     SOUTH {
         @Override
-        Directions nextSide(char c) {
+        Directions alterOrientation(char c) {
             if (c == 'L')
                 return EAST;
             return WEST;
@@ -19,7 +19,7 @@ public enum Directions {
     },
     EAST {
         @Override
-        Directions nextSide(char c) {
+        Directions alterOrientation(char c) {
             if (c == 'L')
                 return NORTH;
             return SOUTH;
@@ -27,12 +27,12 @@ public enum Directions {
     },
     WEST {
         @Override
-        Directions nextSide(char c) {
+        Directions alterOrientation(char c) {
             if (c == 'L')
                 return SOUTH;
             return NORTH;
         }
     };
 
-    abstract Directions nextSide(char c);
+    abstract Directions alterOrientation(char c);
 }
