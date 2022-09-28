@@ -60,7 +60,7 @@ public class SpaceProbe implements Movement {
     public void move(String command, List<Point> existingCoordinatesButItsOwn) {
         for (char c : command.toCharArray()) {
             if (c == 'L' || c == 'R')
-                this.pointsTo = this.pointsTo.nextSide(c);
+                this.pointsTo = pointsTo.nextSide(c);
             else if (!carefullyRelocate(pointsTo, existingCoordinatesButItsOwn)) break;
         }
     }

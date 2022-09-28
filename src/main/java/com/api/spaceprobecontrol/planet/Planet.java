@@ -70,8 +70,8 @@ public class Planet {
     }
 
     public boolean hasSuitableBorders(List<LandSpaceProbeRequest.LandState> aspirantProbes) {
-        Predicate<LandSpaceProbeRequest.LandState> respectsXAxis = aspirantProbe -> aspirantProbe.getxAxis() <= this.xAxis;
-        Predicate<LandSpaceProbeRequest.LandState> respectsYAxis = aspirantProbe -> aspirantProbe.getyAxis() <= this.yAxis;
+        Predicate<LandSpaceProbeRequest.LandState> respectsXAxis = aspirantProbe -> aspirantProbe.getxAxis() <= xAxis;
+        Predicate<LandSpaceProbeRequest.LandState> respectsYAxis = aspirantProbe -> aspirantProbe.getyAxis() <= yAxis;
 
         return aspirantProbes
                 .stream()
@@ -79,7 +79,7 @@ public class Planet {
     }
 
     public List<Point> accessBusyCoordinates() {
-        return this.spaceProbes
+        return spaceProbes
                 .stream()
                 .map(SpaceProbe::getCoordinate)
                 .collect(Collectors.toList());
