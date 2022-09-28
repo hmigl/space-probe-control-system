@@ -50,9 +50,9 @@ public class LandSpaceProbeRequest {
         @NotNull
         private Integer yAxis;
         @NotNull
-        private Directions pointsTo;
+        private Orientation pointsTo;
 
-        public LandState(Integer xAxis, Integer yAxis, Directions pointsTo) {
+        public LandState(Integer xAxis, Integer yAxis, Orientation pointsTo) {
             this.xAxis = xAxis;
             this.yAxis = yAxis;
             this.pointsTo = pointsTo;
@@ -66,7 +66,7 @@ public class LandSpaceProbeRequest {
             return yAxis;
         }
 
-        public Directions getPointsTo() {
+        public Orientation getPointsTo() {
             return pointsTo;
         }
 

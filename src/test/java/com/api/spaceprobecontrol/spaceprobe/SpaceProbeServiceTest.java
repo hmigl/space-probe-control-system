@@ -30,9 +30,9 @@ class SpaceProbeServiceTest  {
     void shouldNotLandDueToRepeatedNewCoordinates() {
         var planet = new Planet(5, 5);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Directions.NORTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Directions.SOUTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Directions.EAST)
+                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
+                new LandSpaceProbeRequest.LandState(2, 2, Orientation.SOUTH),
+                new LandSpaceProbeRequest.LandState(2, 2, Orientation.EAST)
         );
 
         assertFalse(spaceProbeService.allCanLand(aspirantProbes, planet));
@@ -43,8 +43,8 @@ class SpaceProbeServiceTest  {
     void shouldNotLandDueToUnsuitableCoordinates() {
         var planet = new Planet(1, 1);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Directions.NORTH),
-                new LandSpaceProbeRequest.LandState(10, 10, Directions.SOUTH)
+                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
+                new LandSpaceProbeRequest.LandState(10, 10, Orientation.SOUTH)
         );
 
         assertFalse(spaceProbeService.allCanLand(aspirantProbes, planet));
@@ -55,11 +55,11 @@ class SpaceProbeServiceTest  {
     void shouldLand() {
         var planet = new Planet(5, 5);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Directions.NORTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Directions.SOUTH),
-                new LandSpaceProbeRequest.LandState(3, 3, Directions.EAST),
-                new LandSpaceProbeRequest.LandState(4, 4, Directions.WEST),
-                new LandSpaceProbeRequest.LandState(5, 5, Directions.NORTH)
+                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
+                new LandSpaceProbeRequest.LandState(2, 2, Orientation.SOUTH),
+                new LandSpaceProbeRequest.LandState(3, 3, Orientation.EAST),
+                new LandSpaceProbeRequest.LandState(4, 4, Orientation.WEST),
+                new LandSpaceProbeRequest.LandState(5, 5, Orientation.NORTH)
         );
 
         assertTrue(spaceProbeService.allCanLand(aspirantProbes, planet));
@@ -75,16 +75,16 @@ class SpaceProbeServiceTest  {
         );
 
         given(spaceProbeRepository.findById(1L))
-                .willReturn(Optional.of(new SpaceProbe(new Point(1, 2), Directions.NORTH, planet)));
+                .willReturn(Optional.of(new SpaceProbe(new Point(1, 2), Orientation.NORTH, planet)));
         given(spaceProbeRepository.findById(2L))
-                .willReturn(Optional.of(new SpaceProbe(new Point(3, 3), Directions.EAST, planet)));
+                .willReturn(Optional.of(new SpaceProbe(new Point(3, 3), Orientation.EAST, planet)));
 
         List<SpaceProbe> repositionedSpaceProbes = spaceProbeService.processInstructions(instructions);
         // verify their final positions
         assertEquals(new Point(1, 3), repositionedSpaceProbes.get(0).getCoordinate());
-        assertEquals(Directions.NORTH, repositionedSpaceProbes.get(0).getPointsTo());
+        assertEquals(Orientation.NORTH, repositionedSpaceProbes.get(0).getPointsTo());
         assertEquals(new Point(5, 1), repositionedSpaceProbes.get(1).getCoordinate());
-        assertEquals(Directions.NORTH, repositionedSpaceProbes.get(1).getPointsTo());
+        assertEquals(Orientation.NORTH, repositionedSpaceProbes.get(1).getPointsTo());
 
         verify(spaceProbeRepository, times(2)).findById(any());
     }
@@ -92,7 +92,7 @@ class SpaceProbeServiceTest  {
     @Test
     @DisplayName("Shouldn't move when collision is imminent")
     void shouldNotMoveWhenImminentCollision() {
-        var spaceProbe = new SpaceProbe(new Point(2, 2), Directions.WEST, new Planet(3, 3));
+        var spaceProbe = new SpaceProbe(new Point(2, 2), Orientation.WEST, new Planet(3, 3));
 
         spaceProbe.move("M", List.of(new Point(1, 2)));
         assertEquals(new Point(2, 2), spaceProbe.getCoordinate());

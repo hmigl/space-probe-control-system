@@ -21,7 +21,7 @@ public class SpaceProbe implements Movement {
     @NotNull
     @Enumerated(value = EnumType.STRING)
     @Column(name = "points_to")
-    private Directions pointsTo;
+    private Orientation pointsTo;
 
     @ManyToOne
     @JoinColumn(name = "planet_id_fk", referencedColumnName = "planet_id")
@@ -34,7 +34,7 @@ public class SpaceProbe implements Movement {
     public SpaceProbe() {
     }
 
-    public SpaceProbe(Point coordinate, Directions pointsTo, Planet planet) {
+    public SpaceProbe(Point coordinate, Orientation pointsTo, Planet planet) {
         this.coordinate = coordinate;
         this.pointsTo = pointsTo;
         this.planet = planet;
@@ -48,7 +48,7 @@ public class SpaceProbe implements Movement {
         return coordinate;
     }
 
-    public Directions getPointsTo() {
+    public Orientation getPointsTo() {
         return pointsTo;
     }
 
@@ -65,12 +65,12 @@ public class SpaceProbe implements Movement {
         }
     }
 
-    private boolean carefullyRelocate(Directions pointsTo, List<Point> existingCoordinatesButItsOwn) {
-        if (pointsTo == Directions.NORTH) // immutable x, y += 1
+    private boolean carefullyRelocate(Orientation pointsTo, List<Point> existingCoordinatesButItsOwn) {
+        if (pointsTo == Orientation.NORTH) // immutable x, y += 1
             return moveTowardsNorth(existingCoordinatesButItsOwn);
-        else if (pointsTo == Directions.SOUTH) // immutable x, y -= 1
+        else if (pointsTo == Orientation.SOUTH) // immutable x, y -= 1
             return moveTowardsSouth(existingCoordinatesButItsOwn);
-        else if (pointsTo == Directions.EAST) // x += 1, immutable y
+        else if (pointsTo == Orientation.EAST) // x += 1, immutable y
             return moveTowardsEast(existingCoordinatesButItsOwn);
         else // x -= 1, immutable y
             return moveTowardsWest(existingCoordinatesButItsOwn);
