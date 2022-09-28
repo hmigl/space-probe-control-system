@@ -84,25 +84,25 @@ public class SpaceProbe implements Movement {
 
     @Override
     public boolean moveTowardsNorth(List<Point> existingCoordinatesButItsOwn) {
-        int y = getCoordinate().y == getPlanet().getyAxis() ? 1 : getCoordinate().y + 1;
-        return canAccomplishMove(new Point(getCoordinate().x, y), existingCoordinatesButItsOwn);
+        int y = coordinate.y == planet.getyAxis() ? 1 : coordinate.y + 1;
+        return canAccomplishMove(new Point(coordinate.x, y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsSouth(List<Point> existingCoordinatesButItsOwn) {
-        int y = getCoordinate().y == 1 ? getPlanet().getyAxis() : getCoordinate().y - 1;
-        return canAccomplishMove(new Point(getCoordinate().x, y), existingCoordinatesButItsOwn);
+        int y = coordinate.y == 1 ? planet.getyAxis() : coordinate.y - 1;
+        return canAccomplishMove(new Point(coordinate.x, y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsEast(List<Point> existingCoordinatesButItsOwn) {
-        int x = getCoordinate().x == getPlanet().getxAxis() ? 1 : getCoordinate().x + 1;
-        return canAccomplishMove(new Point(x, getCoordinate().y), existingCoordinatesButItsOwn);
+        int x = coordinate.x == planet.getxAxis() ? 1 : coordinate.x + 1;
+        return canAccomplishMove(new Point(x, coordinate.y), existingCoordinatesButItsOwn);
     }
 
     @Override
     public boolean moveTowardsWest(List<Point> existingCoordinatesButItsOwn) {
-        int x = getCoordinate().x == 1 ? getPlanet().getxAxis() : getCoordinate().x - 1;
-        return canAccomplishMove(new Point(x, getCoordinate().y), existingCoordinatesButItsOwn);
+        int x = coordinate.x == 1 ? planet.getxAxis() : coordinate.x - 1;
+        return canAccomplishMove(new Point(x, coordinate.y), existingCoordinatesButItsOwn);
     }
 }
