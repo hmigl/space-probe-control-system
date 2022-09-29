@@ -30,7 +30,10 @@ public class PlanetController {
 
     @GetMapping
     ResponseEntity<?> showPlanets() {
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        List<Planet> planets = (List<Planet>) repository.findAll();
+
+        if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets");
+        return ResponseEntity.status(HttpStatus.OK).body(planets);
     }
 
     @GetMapping("/{id}")
