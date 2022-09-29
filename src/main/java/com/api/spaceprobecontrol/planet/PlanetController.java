@@ -30,7 +30,7 @@ public class PlanetController {
 
     @GetMapping
     ResponseEntity<?> showPlanets() {
-        List<Planet> planets = (List<Planet>) repository.findAll();
+        List<Planet> planets = repository.findAll();
 
         if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets");
         return ResponseEntity.status(HttpStatus.OK).body(planets);
@@ -58,7 +58,7 @@ public class PlanetController {
     @DeleteMapping
     @Transactional
     ResponseEntity<?> deleteAllPlanets() {
-        List<Planet> planets = (List<Planet>) repository.findAll();
+        List<Planet> planets = repository.findAll();
 
         if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets to delete");
         repository.deleteAll(); return ResponseEntity.status(HttpStatus.OK).build();
