@@ -118,3 +118,4 @@ space probe operations
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Licence
+`space-probe-control-system` is licensed under the terms of the [GPL License](https://github.com/hmigl/space-probe-control-system/blob/main/LICENSE).
