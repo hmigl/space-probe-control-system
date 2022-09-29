@@ -23,11 +23,9 @@ public class PlanetController {
     @Transactional
     ResponseEntity<Object> registerNewPlanet(@RequestBody @Valid RegisterPlanetRequest request) {
         var newPlanet = request.toModel();
-        repository.save(newPlanet);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("location", "/api/planets/" + newPlanet.getId())
-                .build();
+                .body(repository.save(newPlanet));
     }
 
     @GetMapping
