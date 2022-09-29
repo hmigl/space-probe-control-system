@@ -145,7 +145,7 @@ class OperateSpaceProbeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .param("planetId", "1"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         verify(spaceProbeService, times(1)).saveAll(anyIterable());
     }
