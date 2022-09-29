@@ -19,6 +19,7 @@ This project uses:
 - Maven
 - Spring Boot
 - Spring Data JPA + Hibernate
+- Docker
 - PostgreSQL
 - JUnit5, Mockito and MockMVC
 
@@ -41,14 +42,14 @@ Wait a few minutes and it's done! The API will be running at `http://localhost:8
 > **Warning!**
 > All resources below are located after `/api`
 
-planet yada yada
+planet operations
 
 | Resource      | POST                | GET                                 | PUT                                            | DELETE                |
 |---------------|---------------------|-------------------------------------|------------------------------------------------|-----------------------|
 | /planets      | Register new planet | Retrieve all<br>planets             | Error                                          | Remove all<br>planets |
 | /planets/{id} | Error               | Retrieve details for<br>planet {id} | Update details of planet {id}, if it<br>exists | Remove planet {id}    |
 
-space probe yada yada
+space probe operations
 
 | Resource     | POST                              | GET                                      | PUT                                                        | DELETE                     |
 |--------------|-----------------------------------|------------------------------------------|------------------------------------------------------------|----------------------------|
