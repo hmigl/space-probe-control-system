@@ -26,9 +26,14 @@ This project uses:
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 ## Getting Started
 After cloning this repository, run:
-```shell
+```
 docker compose up -d
 ```
+To execute unit tests, run:
+```
+./mvnw test
+```
+
 Wait a few minutes and it's done! The API will be running at `http://localhost:8080/`
 
 > Make sure you've got a tool like [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/)
