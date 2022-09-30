@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.awt.*;
 import java.util.List;
@@ -38,7 +39,7 @@ public class LandSpaceProbeRequest {
     public List<SpaceProbe> toModel(Planet planet) {
         return spaceProbes
                 .stream()
-                .map(probe -> new SpaceProbe(new Point(probe.getxAxis(), probe.getyAxis()), probe.getPointsTo(), planet))
+                .map(probe -> new SpaceProbe(new Point(probe.getxAxis(), probe.getyAxis()), Orientation.valueOf(probe.getPointsTo()), planet))
                 .collect(Collectors.toList());
     }
 
@@ -50,9 +51,10 @@ public class LandSpaceProbeRequest {
         @NotNull
         private Integer yAxis;
         @NotNull
-        private Orientation pointsTo;
+        @Pattern(regexp = "NORTH|SOUTH|EAST|WEST")
+        private String pointsTo;
 
-        public LandState(Integer xAxis, Integer yAxis, Orientation pointsTo) {
+        public LandState(Integer xAxis, Integer yAxis, String pointsTo) {
             this.xAxis = xAxis;
             this.yAxis = yAxis;
             this.pointsTo = pointsTo;
@@ -66,7 +68,7 @@ public class LandSpaceProbeRequest {
             return yAxis;
         }
 
-        public Orientation getPointsTo() {
+        public String getPointsTo() {
             return pointsTo;
         }
 
@@ -75,7 +77,7 @@ public class LandSpaceProbeRequest {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             LandState landState = (LandState) o;
-            return xAxis.equals(landState.xAxis) && yAxis.equals(landState.yAxis) && pointsTo == landState.pointsTo;
+            return xAxis.equals(landState.xAxis) && yAxis.equals(landState.yAxis) && pointsTo.equals(landState.pointsTo);
         }
 
         @Override

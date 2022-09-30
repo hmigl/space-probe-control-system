@@ -41,7 +41,7 @@ class OperateSpaceProbeControllerTest {
     @DisplayName("Should register a new space probe")
     void shouldRegisterNewSpaceProbe() throws Exception {
         var planet = new Planet(1, 1);
-        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH)));
+        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, "NORTH")));
         String json = new ObjectMapper().writeValueAsString(request);
 
         given(planetRepository.findById(any()))
@@ -62,7 +62,7 @@ class OperateSpaceProbeControllerTest {
     @DisplayName("Shouldn't be able to land")
     void shouldNotBeAbleToLand() throws Exception {
         var planet = new Planet(1, 1);
-        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH)));
+        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, "NORTH")));
         String json = new ObjectMapper().writeValueAsString(request);
 
         given(planetRepository.findById(any()))
@@ -82,7 +82,7 @@ class OperateSpaceProbeControllerTest {
     @Test
     @DisplayName("Shouldn't find planet")
     void shouldNotFoundPlanet() throws Exception {
-        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH)));
+        var request = new LandSpaceProbeRequest(List.of(new LandSpaceProbeRequest.LandState(1, 1, "NORTH")));
         String json = new ObjectMapper().writeValueAsString(request);
 
         given(planetRepository.findById(any()))

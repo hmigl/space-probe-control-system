@@ -30,9 +30,9 @@ class SpaceProbeServiceTest  {
     void shouldNotLandDueToRepeatedNewCoordinates() {
         var planet = new Planet(5, 5);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Orientation.SOUTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Orientation.EAST)
+                new LandSpaceProbeRequest.LandState(1, 1, "NORTH"),
+                new LandSpaceProbeRequest.LandState(2, 2, "SOUTH"),
+                new LandSpaceProbeRequest.LandState(2, 2, "EAST")
         );
 
         assertFalse(spaceProbeService.allCanLand(aspirantProbes, planet));
@@ -43,8 +43,8 @@ class SpaceProbeServiceTest  {
     void shouldNotLandDueToUnsuitableCoordinates() {
         var planet = new Planet(1, 1);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
-                new LandSpaceProbeRequest.LandState(10, 10, Orientation.SOUTH)
+                new LandSpaceProbeRequest.LandState(1, 1, "NORTH"),
+                new LandSpaceProbeRequest.LandState(10, 10, "SOUTH")
         );
 
         assertFalse(spaceProbeService.allCanLand(aspirantProbes, planet));
@@ -55,11 +55,11 @@ class SpaceProbeServiceTest  {
     void shouldLand() {
         var planet = new Planet(5, 5);
         List<LandSpaceProbeRequest.LandState> aspirantProbes = List.of(
-                new LandSpaceProbeRequest.LandState(1, 1, Orientation.NORTH),
-                new LandSpaceProbeRequest.LandState(2, 2, Orientation.SOUTH),
-                new LandSpaceProbeRequest.LandState(3, 3, Orientation.EAST),
-                new LandSpaceProbeRequest.LandState(4, 4, Orientation.WEST),
-                new LandSpaceProbeRequest.LandState(5, 5, Orientation.NORTH)
+                new LandSpaceProbeRequest.LandState(1, 1, "NORTH"),
+                new LandSpaceProbeRequest.LandState(2, 2, "SOUTH"),
+                new LandSpaceProbeRequest.LandState(3, 3, "EAST"),
+                new LandSpaceProbeRequest.LandState(4, 4, "WEST"),
+                new LandSpaceProbeRequest.LandState(5, 5, "NORTH")
         );
 
         assertTrue(spaceProbeService.allCanLand(aspirantProbes, planet));
