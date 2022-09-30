@@ -32,7 +32,8 @@ public class PlanetController {
     ResponseEntity<?> showPlanets() {
         List<Planet> planets = repository.findAll();
 
-        if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets");
+        if (planets.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets");
         return ResponseEntity.status(HttpStatus.OK).body(planets);
     }
 
@@ -49,7 +50,8 @@ public class PlanetController {
         Optional<Planet> possiblePlanet = repository.findById(id);
 
         return possiblePlanet.map(planet -> {
-            if (planet.hasSpaceProbes()) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if (planet.hasSpaceProbes())
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             planet.reshape(request);
             return ResponseEntity.status(HttpStatus.OK).body(repository.save(planet));
         }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
@@ -60,8 +62,10 @@ public class PlanetController {
     ResponseEntity<?> deleteAllPlanets() {
         List<Planet> planets = repository.findAll();
 
-        if (planets.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets to delete");
-        repository.deleteAll(); return ResponseEntity.status(HttpStatus.OK).build();
+        if (planets.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There are no planets to delete");
+        repository.deleteAll();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
