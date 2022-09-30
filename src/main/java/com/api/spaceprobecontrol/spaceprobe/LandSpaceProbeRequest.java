@@ -29,13 +29,6 @@ public class LandSpaceProbeRequest {
         return spaceProbes;
     }
 
-    @Override
-    public String toString() {
-        return "DesignateSpaceProbeListRequest{" +
-                "spaceProbes=" + spaceProbes +
-                '}';
-    }
-
     public List<SpaceProbe> toModel(Planet planet) {
         return spaceProbes
                 .stream()
@@ -46,13 +39,13 @@ public class LandSpaceProbeRequest {
     public static class LandState {
         @Positive
         @NotNull
-        private Integer xAxis;
+        private final Integer xAxis;
         @Positive
         @NotNull
-        private Integer yAxis;
+        private final Integer yAxis;
         @NotNull
         @Pattern(regexp = "NORTH|SOUTH|EAST|WEST")
-        private String pointsTo;
+        private final String pointsTo;
 
         public LandState(Integer xAxis, Integer yAxis, String pointsTo) {
             this.xAxis = xAxis;

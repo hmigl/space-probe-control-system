@@ -24,13 +24,6 @@ public class MoveSpaceProbeRequest {
         return instructions;
     }
 
-    @Override
-    public String toString() {
-        return "MoveSpaceProbeRequest{" +
-                "instructions=" + instructions +
-                '}';
-    }
-
     public static class MovementDemand {
         @Positive
         @NotNull
@@ -51,14 +44,6 @@ public class MoveSpaceProbeRequest {
 
         public String getCommand() {
             return command;
-        }
-
-        @Override
-        public String toString() {
-            return "MovementDemand{" +
-                    "probeId=" + probeId +
-                    ", command='" + command + '\'' +
-                    '}';
         }
     }
 }
